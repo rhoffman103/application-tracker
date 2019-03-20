@@ -8,6 +8,7 @@ class SignUp extends Component {
         super(props);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
+            signupPage: true,
             userName: "",
             email: "",
             password: "",
@@ -38,7 +39,9 @@ class SignUp extends Component {
     render() {
         return (
             <div className="wrapper">
-                <Nav />
+                <Nav 
+                    signupPage={this.state.signupPage}
+                />
                 <Container>
                     <SignupForm
                         userName={this.state.userName}
