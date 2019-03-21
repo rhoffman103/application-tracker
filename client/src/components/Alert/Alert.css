@@ -1,0 +1,20 @@
+.b-radius-1 {
+    border-radius: .5em;
+}
+
+.alert {
+    border: "1px solid";
+    padding: .5rem;
+}
+
+.red-alert {
+    background-color: rgb(255, 153, 153);
+    box-shadow: 0 0 30px rgb(214, 13, 64) inset;
+    border-color: red;
+}
+
+.blue-alert {
+    background-color: rgba(161, 161, 255, 0.747);
+    box-shadow: 0 0 30px blue inset;
+    border-color: blue;
+}
