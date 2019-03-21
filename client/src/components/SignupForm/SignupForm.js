@@ -3,6 +3,7 @@ import Input from "react-materialize/lib/Input";
 import Card from "react-materialize/lib/Card";
 import Row from "react-materialize/lib/Row";
 import Button from "react-materialize/lib/Button";
+import Alert from "../Alert/Alert";
 
 export const SignupForm = props => (
     <Row>
@@ -12,6 +13,14 @@ export const SignupForm = props => (
             title='Sign Up!'
         >
             <p>Make an account and organize your job hunt.</p>
+                {!props.comparePasswords &&
+                    <Alert
+                        status="red"
+                        className="b-radius-1"
+                    >
+                        <p>Passwords did not match!</p>
+                    </Alert>
+                }
             <form>
                 <Input
                     s={12}
@@ -30,6 +39,8 @@ export const SignupForm = props => (
                     value={props.email}
                     onChange={props.checkForEmailAvailability}
                 />
+            </form>
+            <form>
                 <Input
                     s={12}
                     type="password"
@@ -51,7 +62,7 @@ export const SignupForm = props => (
             </form>
             <Button
                 className="deep-purple"
-                onClick={props.collectForm}
+                onClick={props.createNewUser}
             >
                 Join Now
             </Button>

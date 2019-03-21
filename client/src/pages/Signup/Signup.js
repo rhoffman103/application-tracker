@@ -15,7 +15,9 @@ class SignUp extends Component {
             password: "",
             confirmPassword: "",
             availableEmail: false,
-            emailInputLabel: "Email"
+            validEmail: false,
+            emailInputLabel: "Email",
+            passwordsMatch: true
         };
     };
 
@@ -46,30 +48,50 @@ class SignUp extends Component {
                 else {
                     this.setState({
                         availableEmail: true,
-                        emailInputLabel: "Email"
+                        emailInputLabel: "Email",
+                        validEmail: true
                     });
                 }
+            });
+        } else {
+            this.setState({
+                validEmail: false,
+                emailInputLabel: "Email not valid!"
             });
         }
     };
 
-    // createNewUser = e => {
-    //     e.preventDefault();
-    //     const that = this;
-    //     if (that.state.username )
-    // };
+    createNewUser = e => {
+        e.preventDefault();
+        const that = this;
+        
+        if (this.state.password === this.state.confirmPassword) {
+            this.setState({
+                passwordsMatch: true
+            });
+
+            if (that.state.availableEmail && that.state.validEmail) {
+                console.log("all match")
+                that.collectForm();
+            }
+        } 
+        else {
+            console.log("passwords do not match")
+            this.setState({
+                passwordsMatch: false,
+                password: "",
+                confirmPassword: ""
+            });
+        }
+    };
 
     collectForm = () => {
-        if (this.state.password.trim() === this.state.confirmPassword.trim()) {
-            const newUser = {
-                user: this.state.userName.trim(),
-                email: this.state.email.trim(),
-                password: this.state.password.trim()
-            }
-            console.log(newUser);
-        } else {
-            console.log("passwords do not match")
+        const newUser = {
+            user: this.state.userName.trim(),
+            email: this.state.email.trim(),
+            password: this.state.password.trim()
         }
+        console.log(newUser);
     }
 
     render() {
@@ -85,8 +107,9 @@ class SignUp extends Component {
                         password={this.state.password}
                         confirmPassword={this.state.confirmPassword}
                         emailInputLabel={this.state.emailInputLabel}
+                        comparePasswords={this.state.passwordsMatch}
                         handleInputChange={this.handleInputChange}
-                        collectForm={this.collectForm}
+                        createNewUser={this.createNewUser}
                         checkForEmailAvailability={this.checkForEmailAvailability}
                     />
                 </Container>
