@@ -6,7 +6,7 @@ export default {
     console.log("register new user request");
     console.log(userData);
     return axios.post("/api/user", userData);
-  }, 
+  },
 
   login: function(userData) {
     console.log("login user request");
@@ -16,7 +16,7 @@ export default {
 
   logout: () => {
     return axios.get("/api/v1/logout");
-    },
+  },
 
   // Get current User
   getUser: function() {
