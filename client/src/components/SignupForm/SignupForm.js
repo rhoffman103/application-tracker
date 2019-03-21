@@ -24,11 +24,11 @@ export const SignupForm = props => (
                 <Input
                     s={12}
                     type="email"
-                    label="Email"
+                    label={props.emailInputLabel}
                     name="email"
                     autoComplete="current-username"
                     value={props.email}
-                    onChange={props.handleInputChange}
+                    onChange={props.checkForEmailAvailability}
                 />
                 <Input
                     s={12}

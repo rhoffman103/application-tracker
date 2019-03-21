@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container } from "react-materialize";
 import { Nav } from "../../components/Nav/Nav";
 import { SignupForm } from "../../components/SignupForm/SignupForm";
+import API from "../../utils/API";
 
 class SignUp extends Component {
     constructor(props) {
@@ -12,7 +13,9 @@ class SignUp extends Component {
             userName: "",
             email: "",
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            availableEmail: false,
+            emailInputLabel: "Email"
         };
     };
 
@@ -22,6 +25,38 @@ class SignUp extends Component {
             [name]: value
         });
     };
+
+    checkForEmailAvailability = e => {
+        this.handleInputChange(e);
+        let emailInput = e.target.value;
+
+        if (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.state.email.trim())) {
+            API.checkRegisteredEmails({
+                email: emailInput
+            })
+            .then( res => {
+                console.log(res);
+                // if (res.data[0]) {
+                //     this.setState({
+                //         availableEmail: false,
+                //         emailInputLabel: "This email address is already registered!"
+                //     });
+                // }
+                // else {
+                //     this.setState({
+                //         availableEmail: true,
+                //         emailInputLabel: "Email input change"
+                //     });
+                // }
+            });
+        }
+    };
+
+    // createNewUser = e => {
+    //     e.preventDefault();
+    //     const that = this;
+    //     if (that.state.username )
+    // };
 
     collectForm = () => {
         if (this.state.password.trim() === this.state.confirmPassword.trim()) {
@@ -48,8 +83,10 @@ class SignUp extends Component {
                         email={this.state.email}
                         password={this.state.password}
                         confirmPassword={this.state.confirmPassword}
+                        emailInputLabel={this.state.emailInputLabel}
                         handleInputChange={this.handleInputChange}
                         collectForm={this.collectForm}
+                        checkForEmailAvailability={this.checkForEmailAvailability}
                     />
                 </Container>
             </div>
