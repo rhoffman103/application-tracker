@@ -6,8 +6,9 @@ import Button from "react-materialize/lib/Button";
 
 export const SignupForm = props => (
     <Row>
+        <div className="col m1 l2"></div>
         <Card 
-            className="large col s12 m10 l8"
+            className="c-align large col s12 m10 l8"
             title='Sign Up!'
         >
             <p>Make an account and organize your job hunt.</p>
