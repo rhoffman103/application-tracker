@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Nav } from "../../components/Nav/Nav";
-import logo from "../../logo.svg";
+import Nav from "../../components/Navbar/Nav";
 import "./Main.css";
+import Container from "react-bootstrap/Container";
+// import Row from "react-bootstrap/Row";
 
 class Main extends Component {
   constructor(props) {
@@ -9,8 +10,6 @@ class Main extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
       user: null,
-      email: "",
-      password: "",
     };
   };
 
@@ -26,17 +25,12 @@ class Main extends Component {
       <div className="App">
         <Nav 
           user={this.state.user}
-          email={this.state.email}
-          password={this.state.password}
-          handleInputChange={this.handleInputChange}
         />
-        <div className="App-header center-align">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>MERN Application Tracker</h2>
+        <Container>
+        <div className="d-flex justify-content-center">
+          <p>stuffs</p>
         </div>
-        <p className="App-intro center-align">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        </Container>
       </div>
     );
   }

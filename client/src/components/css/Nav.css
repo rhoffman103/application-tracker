@@ -1,0 +1,27 @@
+nav .navbar-brand {
+    color:#673ab7 !important;
+}
+
+.purple-text {
+    color:#673ab7 !important;
+}
+
+.purple-bg {
+    background-color:#673ab7;
+}
+
+.btn-purple {
+    color: #fff;
+    background-color:#673ab7;
+    border-color: #673ab7;
+}
+
+.btn-purple:hover {
+    color: #fff;
+    background-color:#722fe6;
+    border-color: #722fe6;
+}
+
+.purple-text.nav-link:hover{
+    color: #722fe6 !important;
+}

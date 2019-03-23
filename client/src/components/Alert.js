@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import "./Alert.css";
+import React from "react";
+import "./css/Alert.css";
 
 let alertStatus = "";
 

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Container } from "react-materialize";
-import { Nav } from "../../components/Nav/Nav";
-import { SignupForm } from "../../components/SignupForm/SignupForm";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Nav from "../../components/Navbar/Nav";
+import SignupForm from "../../components/SignupForm";
 import API from "../../utils/API";
 
 class SignUp extends Component {
@@ -16,8 +18,12 @@ class SignUp extends Component {
             confirmPassword: "",
             availableEmail: false,
             validEmail: false,
-            emailInputLabel: "Email",
-            passwordsMatch: true
+            emailError: false,
+            emailErrorMsg: "",
+            passwordErrorMsg: "",
+            cPasswordErrorMsg: "",
+            passwordsMatch: true,
+            isPassword: true
         };
     };
 
@@ -28,55 +34,80 @@ class SignUp extends Component {
         });
     };
 
-    checkForEmailAvailability = e => {
+    checkEmailInput = e => {
         this.handleInputChange(e);
         let emailInput = e.target.value;
         let emailRegex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
         
-        if (emailRegex.test(emailInput.trim())) {
-            API.checkRegisteredEmails({
-                email: emailInput
-            })
-            .then( res => {
-                console.log(res);
-                if (res.data) {
-                    this.setState({
-                        availableEmail: false,
-                        emailInputLabel: "This email address is already registered!"
-                    });
-                }
-                else {
-                    this.setState({
-                        availableEmail: true,
-                        emailInputLabel: "Email",
-                        validEmail: true
-                    });
-                }
-            });
+        if (e.target.value.length > 0) {
+            if (emailRegex.test(emailInput.trim())) {
+                API.checkRegisteredEmails({
+                    email: emailInput
+                })
+                .then( res => {
+                    console.log(res);
+                    if (res.data) {
+                        console.log("email already registered");
+                        this.setState({
+                            emailError: true,
+                            emailErrorMsg: "This email address is already registered!"
+                        });
+                    } else {
+                        console.log("valid email");
+                        this.setState({
+                            emailError: false,
+                            validEmail: true
+                        });
+                    }
+                });
+            } else {
+                console.log("invalid Email");
+                this.setState({
+                    emailError: true,
+                    validEmail: false,
+                    emailErrorMsg: 'Invalid Email!'
+                });
+            }
         } else {
+            console.log("empty email field");
             this.setState({
-                validEmail: false,
-                emailInputLabel: "Email not valid!"
+                emailError: false,
+                validEmail: false
             });
         }
     };
+
+    checkPasswordStrength = e => {
+        this.handleInputChange(e);
+        const minLength = 8;
+
+        if (e.target.value.length >= minLength) {
+            this.setState({
+                isPassword: true
+            })
+        } else {
+            this.setState({
+                isPassword: false
+            })
+        }
+    }
 
     createNewUser = e => {
         e.preventDefault();
         const that = this;
         
-        if (this.state.password === this.state.confirmPassword) {
+        if (this.state.password.trim() === this.state.confirmPassword.trim()) {
             this.setState({
                 passwordsMatch: true
             });
 
-            if (that.state.availableEmail && that.state.validEmail) {
-                console.log("all match")
+            if (that.state.validEmail) {
+                console.log("all match");
                 that.collectForm();
             }
         } 
         else {
-            console.log("passwords do not match")
+            console.log("passwords do not match");
             this.setState({
                 passwordsMatch: false,
                 password: "",
@@ -101,17 +132,32 @@ class SignUp extends Component {
                     signupPage={this.state.signupPage}
                 />
                 <Container>
-                    <SignupForm
-                        userName={this.state.userName}
-                        email={this.state.email}
-                        password={this.state.password}
-                        confirmPassword={this.state.confirmPassword}
-                        emailInputLabel={this.state.emailInputLabel}
-                        comparePasswords={this.state.passwordsMatch}
-                        handleInputChange={this.handleInputChange}
-                        createNewUser={this.createNewUser}
-                        checkForEmailAvailability={this.checkForEmailAvailability}
-                    />
+                    <Row>
+                        <Col sm={12} m={1} lg={2} xl={3}></Col>
+                        <Col sm={12} m={10} lg={8} xl={6}>
+                            <SignupForm
+                                // Username props
+                                userName={this.state.userName}
+                                // Email props
+                                email={this.state.email}
+                                emailError={this.state.emailError}
+                                emailErrorMsg={this.state.emailErrorMsg}
+                                checkEmailInput={this.checkEmailInput}
+                                // Password props
+                                password={this.state.password}
+                                isPassword={this.state.isPassword}
+                                checkPasswordStrength={this.checkPasswordStrength}
+                                passwordErrorMsg={this.state.passwordErrorMsg}
+                                // Confirm password Props
+                                confirmPassword={this.state.confirmPassword}
+                                cPasswordErrorMsg={this.state.cPasswordErrorMsg}
+                                comparePasswords={this.state.passwordsMatch}
+                                // Event handlers
+                                handleInputChange={this.handleInputChange}
+                                createNewUser={this.createNewUser}
+                            />
+                        </Col>
+                    </Row>
                 </Container>
             </div>
         );
