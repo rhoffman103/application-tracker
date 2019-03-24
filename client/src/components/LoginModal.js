@@ -37,13 +37,6 @@ class LoginModal extends React.Component {
                     <Modal.Body>
                         <Login />
                     </Modal.Body>
-                    <Modal.Footer>
-                        <p>Not a member?
-                           <span>
-                               <a href='/signup' className="deep-purple-text ml-1">Sign Up</a>
-                           </span>
-                       </p>
-                    </Modal.Footer>
                 </Modal>
             </div>
         );

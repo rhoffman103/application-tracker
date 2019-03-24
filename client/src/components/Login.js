@@ -2,6 +2,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import FormField from "./FormField";
+import Col from "react-bootstrap/Col";
 
 class Login extends React.Component {
     constructor(props) {
@@ -57,15 +58,34 @@ class Login extends React.Component {
                     errorMsg={this.state.passwordErrorMsg}
                     onChange={this.handleInputChange}
                 />
-                <Button
-                    variant="purple"
-                    onClick={(e) => {
-                        e.preventDefault()
-                        this.collectForm();
-                    }}
-                >
-                    Sign In
-                </Button>
+                <Form.Row>
+                    <Col sm={12} md={6}>
+                            <span>
+                                {this.props.signupPage
+                                    ?   <React.Fragment>
+                                            <p>Not a member?</p>
+                                            <a href='/signup' className="purple-text ml-1">Sign Up!</a>
+                                        </React.Fragment>
+                                    :   <React.Fragment>
+                                            <p className="d-inline">Not a member?</p>
+                                            <span className="ml-2 purple-text purple-trigger" onClick={this.props.switchLogin}>Sign Up!</span>
+                                        </React.Fragment>
+                                }
+                            </span>
+                    </Col>
+                    <Col sm={12} md={6}>
+                        <Button
+                            className="float-right"
+                            variant="purple"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                this.collectForm();
+                            }}
+                        >
+                            Sign In
+                        </Button>
+                    </Col>
+                </Form.Row>
             </Form>
         );
     }

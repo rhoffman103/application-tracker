@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
+import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Nav from "../../components/Navbar/Nav";
 import SignupForm from "../../components/SignupForm";
+import Login from "../../components/Login";
 import API from "../../utils/API";
 
 class SignUp extends Component {
@@ -11,15 +13,16 @@ class SignUp extends Component {
         super(props);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
-            signupPage: true,
-            userName: "",
+            signupPage: false,
+            memberSignIn: false,
+            newUsername: "",
             usernameErrorMsg: "",
-            email: "",
+            newEmail: "",
             availableEmail: false,
             validEmail: false,
             emailError: false,
             emailErrorMsg: "",
-            password: "",
+            newPassword: "",
             isPassword: true,
             passwordErrorMsg: "",
             confirmPassword: "",
@@ -47,7 +50,7 @@ class SignUp extends Component {
                     email: emailInput
                 })
                 .then( res => {
-                    console.log(res);
+                    // console.log(res);
                     if (res.data) {
                         console.log("email already registered");
                         this.setState({
@@ -63,7 +66,6 @@ class SignUp extends Component {
                     }
                 });
             } else {
-                console.log("invalid Email");
                 this.setState({
                     emailError: true,
                     validEmail: false,
@@ -102,7 +104,7 @@ class SignUp extends Component {
         let passwordsMatch = true;
         let cPasswordErrorMsg = "";
 
-        if (this.state.password.trim() === this.state.confirmPassword.trim()) {
+        if (this.state.newPassword.trim() === this.state.confirmPassword.trim()) {
             this.setState({
                 passwordsMatch: true
             });
@@ -113,14 +115,13 @@ class SignUp extends Component {
             }
         } 
         else {
-            console.log("passwords do not match");
             passwordsMatch = false;
             cPasswordErrorMsg = "Passwords did not match!";
 
             this.setState({
                 passwordsMatch: false,
                 cPasswordErrorMsg: "Passwords did not match!",
-                password: "",
+                newPassword: "",
                 confirmPassword: ""
             });
         }
@@ -130,8 +131,8 @@ class SignUp extends Component {
 
     collectForm = () => {
         const newUser = {
-            user: this.state.userName.trim(),
-            email: this.state.email.trim(),
+            user: this.state.newUsername.trim(),
+            email: this.state.newEmail.trim(),
             password: this.state.password.trim()
         }
         console.log(newUser);
@@ -156,6 +157,14 @@ class SignUp extends Component {
         });
     };
 
+    switchLogin = () => {
+        const memberSignIn = this.state.memberSignIn;
+
+        this.setState({
+            memberSignIn: !memberSignIn
+        })
+    }
+
     render() {
         return (
             <div className="wrapper">
@@ -166,29 +175,42 @@ class SignUp extends Component {
                     <Row>
                         <Col sm={12} m={1} lg={2} xl={3}></Col>
                         <Col sm={12} m={10} lg={8} xl={6}>
-                            <SignupForm
-                                // Username props
-                                userName={this.state.userName}
-                                // Email props
-                                email={this.state.email}
-                                emailError={this.state.emailError}
-                                emailErrorMsg={this.state.emailErrorMsg}
-                                checkEmailInput={this.checkEmailInput}
-                                // Password props
-                                password={this.state.password}
-                                isPassword={this.state.isPassword}
-                                checkPasswordStrength={this.checkPasswordStrength}
-                                passwordErrorMsg={this.state.passwordErrorMsg}
-                                // Confirm password Props
-                                confirmPassword={this.state.confirmPassword}
-                                cPasswordErrorMsg={this.state.cPasswordErrorMsg}
-                                comparePasswords={this.state.passwordsMatch}
-                                // Event handlers
-                                handleInputChange={this.handleInputChange}
-                                createNewUser={this.createNewUser}
-                                // General errors
-                                errors={this.state.errors}
-                            />
+                            {!this.state.memberSignIn
+                                ?   <SignupForm
+                                        // Username props
+                                        userName={this.state.newUsername}
+                                        // Email props
+                                        email={this.state.newEmail}
+                                        emailError={this.state.emailError}
+                                        emailErrorMsg={this.state.emailErrorMsg}
+                                        checkEmailInput={this.checkEmailInput}
+                                        // Password props
+                                        password={this.state.newPassword}
+                                        isPassword={this.state.isPassword}
+                                        checkPasswordStrength={this.checkPasswordStrength}
+                                        passwordErrorMsg={this.state.passwordErrorMsg}
+                                        // Confirm password Props
+                                        confirmPassword={this.state.confirmPassword}
+                                        cPasswordErrorMsg={this.state.cPasswordErrorMsg}
+                                        comparePasswords={this.state.passwordsMatch}
+                                        // Event handlers
+                                        handleInputChange={this.handleInputChange}
+                                        createNewUser={this.createNewUser}
+                                        switchLogin={this.switchLogin}
+                                        // General errors
+                                        errors={this.state.errors}
+                                    />
+                                :   <Card>
+                                        <Card.Body>
+                                            <Card.Title>Sign In!</Card.Title>
+                                            <Login
+                                                signupPage={this.state.signupPage}
+                                                switchLogin={this.switchLogin}
+                                            />
+                                        </Card.Body>
+                                    </Card>
+
+                            }
                         </Col>
                     </Row>
                 </Container>

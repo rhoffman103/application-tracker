@@ -25,3 +25,8 @@ nav .navbar-brand {
 .purple-text.nav-link:hover{
     color: #722fe6 !important;
 }
+
+.purple-trigger:hover {
+    cursor: pointer;
+    color: #722fe6 !important;
+}

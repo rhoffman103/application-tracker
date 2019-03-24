@@ -3,6 +3,8 @@ import FormField from "./FormField";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import "./css/Alert.css";
 
 const SignupForm = props => (
@@ -20,10 +22,10 @@ const SignupForm = props => (
             <form>
                 <FormField
                     label="Username"
-                    name="userName"
+                    name="newUsername"
                     type="username"
                     autoComplete="current-username"
-                    controlId="username"
+                    controlId="newUsername"
                     value={props.userName}
                     error={props.usernameError}
                     errorMsg={props.usernameErrorMsg}
@@ -31,7 +33,7 @@ const SignupForm = props => (
                 />
                 <FormField
                     label="Email"
-                    name="email"
+                    name="newEmail"
                     type="email"
                     controlId="email"
                     autoComplete="current-email"
@@ -42,9 +44,9 @@ const SignupForm = props => (
                 />
                 <FormField
                     label="Password"
-                    name="password"
+                    name="newPassword"
                     type="password"
-                    controlId="password"
+                    controlId="newPassword"
                     autoComplete="current-password"
                     value={props.password}
                     error={!props.isPassword}
@@ -62,13 +64,21 @@ const SignupForm = props => (
                     errorMsg={props.cPasswordErrorMsg}
                     onChange={props.handleInputChange}
                 />
-                <Button
-                    variant="purple"
-                    className="float-right"
-                    onClick={props.createNewUser}
-                >
-                    Join Now
-                </Button>
+                <Row>
+                    <Col sm={12} md={6}>
+                        <p className="d-inline">Already a member?</p>
+                        <span className="ml-2 purple-text purple-trigger" onClick={props.switchLogin}>Sign In</span>
+                    </Col>
+                    <Col sm={12} md={6}>
+                        <Button
+                            variant="purple"
+                            className="float-right"
+                            onClick={props.createNewUser}
+                        >
+                            Join Now
+                        </Button>
+                    </Col>
+                </Row>
             </form>
         </Card.Body>
     </Card>
