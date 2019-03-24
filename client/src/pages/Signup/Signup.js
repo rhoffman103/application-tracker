@@ -13,17 +13,19 @@ class SignUp extends Component {
         this.state = {
             signupPage: true,
             userName: "",
+            usernameErrorMsg: "",
             email: "",
-            password: "",
-            confirmPassword: "",
             availableEmail: false,
             validEmail: false,
             emailError: false,
             emailErrorMsg: "",
+            password: "",
+            isPassword: true,
             passwordErrorMsg: "",
+            confirmPassword: "",
             cPasswordErrorMsg: "",
             passwordsMatch: true,
-            isPassword: true
+            errors: []
         };
     };
 
@@ -83,11 +85,13 @@ class SignUp extends Component {
 
         if (e.target.value.length >= minLength) {
             this.setState({
-                isPassword: true
+                isPassword: true,
+                passwordErrorMsg: ""
             })
         } else {
             this.setState({
-                isPassword: false
+                isPassword: false,
+                passwordErrorMsg: "Password not strong enough!"
             })
         }
     }
@@ -95,12 +99,14 @@ class SignUp extends Component {
     createNewUser = e => {
         e.preventDefault();
         const that = this;
-        
+        let passwordsMatch = true;
+        let cPasswordErrorMsg = "";
+
         if (this.state.password.trim() === this.state.confirmPassword.trim()) {
             this.setState({
                 passwordsMatch: true
             });
-
+            
             if (that.state.validEmail) {
                 console.log("all match");
                 that.collectForm();
@@ -108,12 +114,18 @@ class SignUp extends Component {
         } 
         else {
             console.log("passwords do not match");
+            passwordsMatch = false;
+            cPasswordErrorMsg = "Passwords did not match!";
+
             this.setState({
                 passwordsMatch: false,
+                cPasswordErrorMsg: "Passwords did not match!",
                 password: "",
                 confirmPassword: ""
             });
         }
+
+        this.collectErrors(passwordsMatch, cPasswordErrorMsg);
     };
 
     collectForm = () => {
@@ -123,7 +135,26 @@ class SignUp extends Component {
             password: this.state.password.trim()
         }
         console.log(newUser);
-    }
+    };
+
+    collectErrors = (passwordsMatch, cPasswordErrorMsg) => {
+        const { usernameErrorMsg, emailErrorMsg, passwordErrorMsg, emailError, isPassword } = this.state;
+        let errors= [];
+
+        if (emailError) {
+            errors.push(emailErrorMsg);
+        }
+        if (!isPassword) {
+            errors.push(passwordErrorMsg);
+        }
+        if (!passwordsMatch) {
+            errors.push(cPasswordErrorMsg);
+        }
+
+        this.setState({
+            errors: errors
+        });
+    };
 
     render() {
         return (
@@ -155,6 +186,8 @@ class SignUp extends Component {
                                 // Event handlers
                                 handleInputChange={this.handleInputChange}
                                 createNewUser={this.createNewUser}
+                                // General errors
+                                errors={this.state.errors}
                             />
                         </Col>
                     </Row>

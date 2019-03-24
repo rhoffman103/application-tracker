@@ -2,20 +2,20 @@ import React from "react";
 import FormField from "./FormField";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Alert from "./Alert";
+import Alert from "react-bootstrap/Alert";
+import "./css/Alert.css";
 
 const SignupForm = props => (
     <Card>
         <Card.Body>
         <Card.Title>Sign Up!</Card.Title>
             <Card.Text>Make an account and organize your job hunt.</Card.Text>
-            {!props.comparePasswords &&
-                <Alert
-                    status="red"
-                    className="b-radius-1"
-                >
-                    <p>Passwords did not match!</p>
-                </Alert>
+            {props.errors &&
+                props.errors.map((error, idx) => (
+                    <Alert key={idx} variant="" className="red-alert text-white">
+                        {error}
+                    </Alert>
+                  ))
             }
             <form>
                 <FormField
@@ -47,9 +47,9 @@ const SignupForm = props => (
                     controlId="password"
                     autoComplete="current-password"
                     value={props.password}
-                    error={props.isPassword}
+                    error={!props.isPassword}
                     errorMsg={props.passwordErrorMsg}
-                    onChange={props.handleInputChange}
+                    onChange={props.checkPasswordStrength}
                 />
                 <FormField
                     label="Confirm Password"
