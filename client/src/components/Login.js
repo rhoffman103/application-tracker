@@ -63,12 +63,12 @@ class Login extends React.Component {
                             <span>
                                 {this.props.signupPage
                                     ?   <React.Fragment>
-                                            <p>Not a member?</p>
-                                            <a href='/signup' className="purple-text ml-1">Sign Up!</a>
+                                            <p className="d-inline">Not a member?</p>
+                                            <span className="ml-2 purple-text purple-trigger" onClick={this.props.switchLogin}>Sign Up!</span>
                                         </React.Fragment>
                                     :   <React.Fragment>
                                             <p className="d-inline">Not a member?</p>
-                                            <span className="ml-2 purple-text purple-trigger" onClick={this.props.switchLogin}>Sign Up!</span>
+                                            <a href='/signup' className="purple-text ml-1">Sign Up!</a>
                                         </React.Fragment>
                                 }
                             </span>
