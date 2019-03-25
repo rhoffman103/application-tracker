@@ -15,16 +15,16 @@ class SignupForm extends React.Component {
         this.state = {
             newUsername: "",
             usernameError: false,
-            usernameErrorMsg: "",
+            usernameErrorMsg: "Empty username field!",
             newEmail: "",
             availableEmail: false,
             validEmail: false,
             emailError: false,
-            emailErrorMsg: "",
+            emailErrorMsg: "Empty email field!",
             newPassword: "",
             isPassword: false,
             passwordError: false,
-            passwordErrorMsg: "",
+            passwordErrorMsg: "Empty password field!",
             confirmPassword: "",
             cPasswordError: false,
             cPasswordErrorMsg: "",
@@ -122,18 +122,25 @@ class SignupForm extends React.Component {
         this.handleInputChange(e);
         const minStrength = 3;
         const passwordStrength = zxcvbn(e.target.value).score;
-
-        if ((passwordStrength >= minStrength) && (e.target.value.length >= 8)) {
-            this.setState({
-                isPassword: true,
-                passwordError: false,
-                passwordErrorMsg: ""
-            })
+        if (e.target.value.length > 0 ) {
+            if ((passwordStrength >= minStrength) && (e.target.value.length >= 8)) {
+                this.setState({
+                    isPassword: true,
+                    passwordError: false,
+                    passwordErrorMsg: ""
+                })
+            } else {
+                this.setState({
+                    isPassword: false,
+                    passwordError: true,
+                    passwordErrorMsg: "Password not strong enough!"
+                })
+            }
         } else {
             this.setState({
                 isPassword: false,
                 passwordError: true,
-                passwordErrorMsg: "Password not strong enough!"
+                passwordErrorMsg: "Empty password field!"
             })
         }
     };
@@ -143,7 +150,9 @@ class SignupForm extends React.Component {
         const confirmPassword = e.target.value;
         if (this.state.newPassword.trim() === confirmPassword.trim()) {
             this.setState({
-                passwordsMatch: true
+                passwordsMatch: true,
+                cPasswordError: false,
+                cPasswordErrorMsg: ""
             });
         } else {
             this.setState({
@@ -156,9 +165,12 @@ class SignupForm extends React.Component {
 
     createNewUser = e => {
         e.preventDefault();
-
+        
         if (!this.state.usernameError && this.state.validEmail && !this.state.emailError && this.state.isPassword) {
             this.collectForm();
+            this.setState({
+                errors: []
+            })
         }
         else if (!this.state.passwordsMatch) {
             this.setState({
@@ -181,13 +193,16 @@ class SignupForm extends React.Component {
     };
 
     collectErrors = () => {
-        const { usernameError, usernameErrorMsg, emailErrorMsg, passwordErrorMsg, emailError, isPassword, passwordsMatch } = this.state;
+        const { newUsername, usernameError, usernameErrorMsg, emailErrorMsg, passwordErrorMsg, emailError, isPassword, passwordsMatch, newEmail } = this.state;
         let errors= [];
 
-        if (usernameError)      errors.push(usernameErrorMsg);
-        if (emailError)         errors.push(emailErrorMsg);
-        if (!isPassword)        errors.push(passwordErrorMsg);
-        if (!passwordsMatch)    errors.push("Passwords did not match!");
+
+        if (newUsername.length < 1) errors.push("Empty username field!")
+        if (usernameError)          errors.push(usernameErrorMsg);
+        if (emailError)             errors.push(emailErrorMsg);
+        if (newEmail.length < 1)    errors.push("Empty email field!");
+        if (!isPassword)            errors.push(passwordErrorMsg);
+        if (!passwordsMatch)        errors.push("Passwords did not match!");
 
         this.setState({
             errors: errors
